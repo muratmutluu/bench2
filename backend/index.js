@@ -13,7 +13,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(
   cors({
-    origin: 'http://localhost:5173',
+    origin: ['http://localhost:5173/', 'https://main--silver-beijinho-8bc369.netlify.app/'],
     credentials: true,
     allowedHeaders: 'Content-Type,Authorization',
     methods: 'GET,PUT,POST,DELETE',
