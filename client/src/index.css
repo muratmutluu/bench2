@@ -1,0 +1,35 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Manrope', sans-serif;
+}
+
+@layer base {
+  body {
+    @apply bg-gray-50 dark:bg-slate-800;
+  }
+}
+
+@layer utilities {
+  .wrapper {
+    @apply max-w-screen-xl mx-auto p-5 md:px-10 xl:px-0 w-full;
+  }
+
+  .btn-primary {
+    @apply px-6 py-2 inline-flex justify-center items-center font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-green-600 rounded-lg hover:bg-green-500 focus:outline-none focus:ring focus:ring-green-300 focus:ring-opacity-80;
+  }
+  .btn-outline {
+    @apply px-6 py-2 inline-flex justify-center items-center font-medium tracking-wide text-green-600 capitalize transition-colors duration-300 transform bg-transparent rounded-lg border hover:ring-1 ring-green-300 border-green-600;
+  }
+}
