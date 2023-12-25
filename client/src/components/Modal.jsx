@@ -11,6 +11,7 @@ const Modal = ({ open, setOpen, timeSlot, day }) => {
     setInputs({
       timeSlot: timeSlot,
       day: day,
+      fieldId: 1,
     });
     setOpen(false);
   };

@@ -11,7 +11,8 @@ const Header = () => {
 
   const handleLogout = async () => {
     try {
-      await axios.get('/api/auth/logout');
+      const res = await axios.get('/api/auth/logout');
+      console.log(res.data.message);
       dispatch({ type: 'LOGOUT' });
       navigate('/');
     } catch (error) {
