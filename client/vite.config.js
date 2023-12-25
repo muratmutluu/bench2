@@ -7,7 +7,7 @@ export default defineConfig({
     proxy: {
       '/api': {
         target: 'http://localhost:3000' || 'https://bench-yf02.onrender.com',
-        secure: false,
+        secure: true,
       },
     },
   },

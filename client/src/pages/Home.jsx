@@ -1,8 +1,11 @@
 import { IoSparklesOutline } from 'react-icons/io5';
 import hero from '../assets/images/hero.jpg';
 import Calendar from '../components/Calendar';
+import useFetch from '../hooks/useFetch';
 
 const Home = () => {
+  const { data } = useFetch('/');
+
   const handleScroll = () => {
     const nextSection = document.getElementById('reservationSection');
 
@@ -15,7 +18,10 @@ const Home = () => {
     <main className="bg-dotted-pattern bg-contain py-4">
       <section className="wrapper grid grid-cols-1 md:grid-cols-2 gap-10">
         <div className="flex flex-col mt-20 gap-10">
-          <h1 className="text-5xl font-extrabold text-gray-700 dark:text-white">Online Halısaha Kiralama</h1>
+          <h1 className="text-5xl font-extrabold text-gray-700 dark:text-white">
+            Online Halısaha Kiralama
+          </h1>
+          <span>{data}</span>
           <p className="text-2xl font-light text-gray-600 dark:text-gray-100">
             → Benchcafe&apos;de halısaha kiralamak artık çok kolay. <br /> Hemen kayıt ol ve
             istediğin tarihteki rezevasyonunu oluştur.
@@ -36,9 +42,8 @@ const Home = () => {
         </div>
       </section>
 
-      <section className='wrapper mt-12' id='reservationSection'>
-
-      <Calendar />
+      <section className="wrapper mt-12" id="reservationSection">
+        <Calendar />
       </section>
     </main>
   );
