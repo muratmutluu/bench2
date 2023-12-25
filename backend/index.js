@@ -20,6 +20,10 @@ app.use(
   })
 );
 
+app.get('/', (req, res) => {
+  res.send('Hello World!');
+});
+
 app.use('/api/auth', authRouter);
 
 app.listen(process.env.PORT_NUMBER || 3000, () => {
