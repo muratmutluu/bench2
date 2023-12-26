@@ -16,6 +16,7 @@ import { timeSlots } from '../constants';
 import Modal from './Modal';
 import { FaCalendarDays } from 'react-icons/fa6';
 import { TbSoccerField } from 'react-icons/tb';
+import useFetch from '../hooks/useFetch';
 
 const Calendar = () => {
   // Tarih Methodları Başlangıç
@@ -48,18 +49,25 @@ const Calendar = () => {
   };
   // Tarih Methodları Bitiş
 
+  const { data, reFetch } = useFetch('/api/reservations');
+
+  const reservedSlots = data.map((reservation) => {
+    return {
+      date: format(reservation.reservation_date, 'yyyy-MM-dd'),
+      time_id: reservation.time_id,
+    };
+  });
+
   const [open, setOpen] = useState(false);
   const [selectedSlot, setSelectedSlot] = useState({});
-  const [selectedDay, setSelectedDay] = useState(null);
+  const [selectedDay, setSelectedDay] = useState(new Date());
 
-  
-
-  const handleCellClick = (itemSlot,itemId, day) => {
+  const handleCellClick = (itemSlot, itemId, day) => {
     setSelectedSlot({
       slot: itemSlot,
       id: itemId,
     });
-    setSelectedDay(format(day, 'dd.MM.yyyy'));
+    setSelectedDay(format(day, 'yyyy-MM-dd'));
     setOpen(true);
   };
 
@@ -115,18 +123,29 @@ const Calendar = () => {
                       <span className="max-w-28 w-full">{item.slot}</span>
                     </span>
                   </td>
-                  {daysOfWeek.map((day, index) => (
-                    <td key={index} className="p-6 border-l border-gray-400">
-                      <div className="flex justify-center items-center text-gray-800 dark:text-gray-50">
-                        <div
-                          className="cursor-pointer"
-                          onClick={() => handleCellClick(item.slot ,item.id, day)}
-                        >
-                          <FaPlus size={20} />
+                  {daysOfWeek.map((day, index) => {
+                    const isReserved = reservedSlots.some(
+                      (reservedSlot) =>
+                        reservedSlot.date === format(day, 'yyyy-MM-dd') &&
+                        reservedSlot.time_id === item.id
+                    );
+                    const cellStyle = isReserved
+                      ? 'bg-red-500 cursor-not-allowed'
+                      : 'cursor-pointer bg-green-400';
+                    return (
+                      <td key={index} className="border-l border-gray-400 text-white">
+                        <div className={cellStyle}>
+                          {isReserved ? (
+                            <div className='flex justify-center items-center p-6'>DOLU</div>
+                          ) : (
+                            <div onClick={() => handleCellClick(item.slot, item.id, day)} className='flex justify-center items-center p-6'>
+                              <FaPlus size={24}/>
+                            </div>
+                          )}
                         </div>
-                      </div>
-                    </td>
-                  ))}
+                      </td>
+                    );
+                  })}
                 </tr>
               ))}
             </tbody>
@@ -135,7 +154,13 @@ const Calendar = () => {
       </div>
 
       {/* Modal */}
-      <Modal open={open} setOpen={setOpen} timeSlot={selectedSlot} day={selectedDay} />
+      <Modal
+        open={open}
+        setOpen={setOpen}
+        timeSlot={selectedSlot}
+        day={selectedDay}
+        reFetch={reFetch}
+      />
     </div>
   );
 };

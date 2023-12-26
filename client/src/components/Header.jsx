@@ -8,7 +8,6 @@ import axios from 'axios';
 const Header = () => {
   const { user, dispatch } = useContext(AuthContext);
   const navigate = useNavigate();
-
   const handleLogout = async () => {
     try {
       const res = await axios.get('/api/auth/logout');
@@ -32,6 +31,16 @@ const Header = () => {
           <DarkModeSwitcher />
           {user ? (
             <>
+              {user.isAdmin ? (
+                <Link to="/dashboard" className="btn-primary">
+                  Dashboard
+                </Link>
+              ) : (
+                <Link to="/reservation_list" className="btn-primary">
+                  Rezervasyonlarım
+                </Link>
+              )}
+
               <span className="text-xl capitalize cursor-pointer text-gray-800 dark:text-gray-50 border-r-2 border-gray-300 pr-3">
                 {user.username}
               </span>

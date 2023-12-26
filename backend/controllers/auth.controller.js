@@ -16,8 +16,8 @@ export const register = (req, res) => {
     const salt = bcryptjs.genSaltSync(10);
     const hashPass = bcryptjs.hashSync(req.body.password, salt);
 
-    const q = 'INSERT INTO users(username, email, password) VALUES(?)';
-    const values = [req.body.username, req.body.email, hashPass];
+    const q = 'INSERT INTO users(username, email,phone_number, password) VALUES(?)';
+    const values = [req.body.username, req.body.email, req.body.phone_number, hashPass];
 
     db.query(q, [values], (err, data) => {
       if (err) throw res.json(err);
@@ -47,12 +47,10 @@ export const login = (req, res) => {
         message: 'Wrong credentials!',
       });
 
-    const token = jwt.sign({ id: data[0].id }, process.env.JWT_SECRET);
+    const token = jwt.sign({ id: data[0].id, isAdmin: data[0].isAdmin }, process.env.JWT_SECRET);
     const { password, ...other } = data[0];
 
     res.cookie('access_token', token, { httpOnly: true }).status(200).json({
-      success: true,
-      message: 'User has been logged in!',
       data: other,
     });
   });

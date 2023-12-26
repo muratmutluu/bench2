@@ -3,23 +3,53 @@ import { Fragment, useState } from 'react';
 import { GiSoccerBall } from 'react-icons/gi';
 import { FaCalendarDays, FaTurkishLiraSign, FaRegClock, FaRegCircleXmark } from 'react-icons/fa6';
 import { TbSoccerField } from 'react-icons/tb';
+import axios from 'axios';
+import { Link } from 'react-router-dom';
+import { format } from 'date-fns';
 
-const Modal = ({ open, setOpen, timeSlot, day }) => {
-  const [inputs, setInputs] = useState({});
-
-  const handleClick = () => {
-    setInputs({
-      timeSlot: timeSlot,
-      day: day,
-      fieldId: 1,
-    });
-    setOpen(false);
+const Modal = ({ open, setOpen, timeSlot, day, reFetch }) => {
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [completed, setCompleted] = useState(false);
+  const inputs = {
+    timeSlot: timeSlot,
+    day: day,
+    fieldId: 1,
   };
-  console.log(inputs);
+
+  const handleClose = () => {
+    setOpen(false);
+    setError(null);
+    setCompleted(false);
+    reFetch();
+  };
+
+  const handleClick = async () => {
+    try {
+      setLoading(true);
+      const res = await axios.post('/api/reservations/create', inputs);
+      if (res.data.success === false) {
+        setLoading(false);
+        setError(res.data.message);
+        return;
+      }
+      setLoading(false);
+      setError(null);
+      setCompleted(true);
+
+      setTimeout(() => {
+        handleClose();
+      }, 1000);
+    } catch (error) {
+      setLoading(false);
+      setError(error.response.data.message);
+    }
+  };
+
   return (
     <>
       <Transition appear show={open} as={Fragment}>
-        <Dialog as="div" className="relative z-10" onClose={() => setOpen(false)}>
+        <Dialog as="div" className="relative z-10" onClose={handleClose}>
           <Transition.Child
             as={Fragment}
             enter="ease-out duration-300"
@@ -64,7 +94,7 @@ const Modal = ({ open, setOpen, timeSlot, day }) => {
                       <div className="flex gap-1 items-center text-lg bg-gray-50 dark:bg-slate-700 p-2 rounded-lg border text-gray-800 dark:text-gray-50 dark:border-gray-600">
                         <FaCalendarDays size={20} />
                         <span className="font-bold">Rezervasyon Tarihi: </span>
-                        <span>{day}</span>
+                        <span>{format(day, 'dd.MM.yyyy')}</span>
                       </div>
                       <div className="flex gap-1 items-center text-lg bg-gray-50 dark:bg-slate-700 p-2 rounded-lg border text-gray-800 dark:text-gray-50 dark:border-gray-600">
                         <FaRegClock size={20} />
@@ -85,16 +115,32 @@ const Modal = ({ open, setOpen, timeSlot, day }) => {
                       className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                       onClick={handleClick}
                     >
-                      Kirala ve Öde
+                      {loading ? 'Kiralanıyor...' : 'Kirala ve Öde'}
                     </button>
                     <button
                       type="button"
                       className="inline-flex justify-center items-center rounded-md border border-transparent bg-red-500 px-4 py-2 text-sm font-medium text-white hover:bg-red-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-200 focus-visible:ring-offset-2"
-                      onClick={() => setOpen(false)}
+                      onClick={handleClose}
                     >
                       <FaRegCircleXmark size={20} />
                     </button>
                   </div>
+                  {completed && (
+                    <p className="text-green-500 text-sm mt-5 text-center dark:bg-gray-50 dark:p-2 dark:rounded-lg">
+                      Rezervasyonunuz başarıyla oluşturuldu.
+                    </p>
+                  )}
+                  {error && (
+                    <p className="text-red-500 text-md mt-5 text-center dark:bg-gray-50 dark:p-2 dark:rounded-lg">
+                      {error}
+                      {error === 'Lütfen giriş yapın!' && (
+                        <Link className="text-blue-600 underline hover:no-underline" to="/login">
+                          {' '}
+                          Giriş Yap
+                        </Link>
+                      )}
+                    </p>
+                  )}
                 </Dialog.Panel>
               </Transition.Child>
             </div>

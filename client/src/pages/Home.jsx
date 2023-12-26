@@ -1,11 +1,8 @@
 import { IoSparklesOutline } from 'react-icons/io5';
 import hero from '../assets/images/hero.jpg';
 import Calendar from '../components/Calendar';
-import useFetch from '../hooks/useFetch';
 
 const Home = () => {
-  const { data } = useFetch('/');
-
   const handleScroll = () => {
     const nextSection = document.getElementById('reservationSection');
 
@@ -21,7 +18,6 @@ const Home = () => {
           <h1 className="text-5xl font-extrabold text-gray-700 dark:text-white">
             Online Halısaha Kiralama
           </h1>
-          <span>{data}</span>
           <p className="text-2xl font-light text-gray-600 dark:text-gray-100">
             → Benchcafe&apos;de halısaha kiralamak artık çok kolay. <br /> Hemen kayıt ol ve
             istediğin tarihteki rezevasyonunu oluştur.

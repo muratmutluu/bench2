@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 const Register = () => {
-  const [inputs, setInputs] = useState({ username: '', email: '', password: '' });
+  const [inputs, setInputs] = useState({ username: '', email: '', password: '', phone_number: '' });
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -18,10 +18,10 @@ const Register = () => {
     try {
       setLoading(true);
       const res = await axios.post('/api/auth/register', inputs);
-      const data = res.data;
-      if (data.success === false) {
+  
+      if (res.data.success === false) {
         setLoading(false);
-        setError(data.message);
+        setError(res.data.message);
         return;
       }
       setLoading(false);
@@ -63,6 +63,14 @@ const Register = () => {
                 className="border p-3 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-600 focus:border-blue-600"
                 required
                 name="email"
+                onChange={handleChange}
+              />
+              <input
+                type="phone"
+                placeholder="Telefon Numarası"
+                className="border p-3 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-600 focus:border-blue-600"
+                required
+                name="phone_number"
                 onChange={handleChange}
               />
               <input
