@@ -3,7 +3,8 @@ import ReservationAreaChart from '../components/ReservationAreaChart';
 import ReservationChart from '../components/ReservationChart';
 import ReservationLineChart from '../components/ReservationLineChart';
 import useFetch from '../hooks/useFetch';
-
+import { FaCheck, FaClipboardList, FaClock, FaUserShield, FaUsers } from 'react-icons/fa';
+import { TbSoccerField } from 'react-icons/tb';
 const Dashboard = () => {
   const { data, loading } = useFetch('api/admin/dashboard');
 
@@ -20,24 +21,28 @@ const Dashboard = () => {
           <div className="rounded-md border bg-gray-100 px-2 py-6 justify-center  shadow-md flex flex-col items-center gap-3">
             <div className="text-xl text-gray-900">Toplam Rezervasyon Sayısı</div>
             <span className="text-2xl flex gap-3 items-center text-blue-600">
+              <FaClipboardList />
               {data.total_reservations}
             </span>
           </div>
           <div className="rounded-md border bg-gray-100 px-2 py-6 justify-center  shadow-md flex flex-col items-center gap-3">
             <div className="text-xl text-gray-900">Toplam Kullanıcı Sayısı</div>
             <span className="text-2xl flex gap-3 items-center text-blue-600">
+              <FaUsers />
               {data.total_users}
             </span>
           </div>
           <div className="rounded-md border bg-gray-100 px-2 py-6 justify-center  shadow-md flex flex-col items-center gap-3">
             <div className="text-xl text-gray-900">Toplam Saha Sayısı</div>
             <span className="text-2xl flex gap-3 items-center text-blue-600">
+              <TbSoccerField className="rotate-90" />
               {data.total_fields}
             </span>
           </div>
           <div className="rounded-md border bg-gray-100 px-2 py-6 justify-center  shadow-md flex flex-col items-center gap-3">
             <div className="text-xl text-gray-900">Toplam Yönetici Sayısı</div>
             <span className="text-2xl flex gap-3 items-center text-blue-600">
+              <FaUserShield />
               {data.total_admins}
             </span>
           </div>
@@ -46,12 +51,14 @@ const Dashboard = () => {
           <div className="rounded-md border bg-gray-100 px-2 py-6 justify-center  shadow-md flex flex-col items-center gap-3">
             <div className="text-xl text-gray-900">Gerçekleşen Rezervasyon Sayısı</div>
             <span className="text-2xl flex gap-3 items-center text-blue-600">
+              <FaCheck />
               {data.completed_reservations}
             </span>
           </div>
           <div className="rounded-md border bg-gray-100 px-2 py-6 justify-center  shadow-md flex flex-col items-center gap-3">
             <div className="text-xl text-gray-900">Gerçekleşmeyen Rezervasyon Sayısı</div>
             <span className="text-2xl flex gap-3 items-center text-blue-600">
+              <FaClock />
               {data.pending_reservations}
             </span>
           </div>

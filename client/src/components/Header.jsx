@@ -4,6 +4,7 @@ import DarkModeSwitcher from './DarkModeSwitcher';
 import { useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import axios from 'axios';
+import { FaUser } from 'react-icons/fa';
 
 const Header = () => {
   const { user, dispatch } = useContext(AuthContext);
@@ -54,7 +55,8 @@ const Header = () => {
                 </Link>
               )}
 
-              <span className="text-xl capitalize cursor-pointer text-gray-800 dark:text-gray-50 border-r-2 border-gray-300 pr-3">
+              <span className="text-xl flex items-center gap-1 cursor-pointer text-gray-800 dark:text-gray-50 border-r-2 border-gray-300 pr-3">
+                <FaUser />
                 {user.username}
               </span>
               <button className="bg-red-500 text-white px-3 py-1 rounded-md" onClick={handleLogout}>
