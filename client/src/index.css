@@ -25,6 +25,9 @@ body {
   .wrapper {
     @apply max-w-screen-xl mx-auto p-5 md:px-10 xl:px-0 w-full;
   }
+  .wrapper-xl {
+    @apply max-w-screen-2xl mx-auto p-5 md:px-10 xl:px-0 w-full;
+  }
 
   .btn-primary {
     @apply px-6 py-2 inline-flex justify-center items-center font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-green-600 rounded-lg hover:bg-green-500 focus:outline-none focus:ring focus:ring-green-300 focus:ring-opacity-80;

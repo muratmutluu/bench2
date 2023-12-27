@@ -55,7 +55,7 @@ export const getReservationsUser = (req, res) => {
     const userInfo = decoded;
 
     const q =
-      'SELECT reservations.id, users.username, reservations.time_id, reservations.field_id, reservations.date AS reservation_date, times.slot AS reservation_time, fields.name AS field_name, fields.price AS field_price FROM reservations JOIN times ON times.id = reservations.time_id JOIN fields ON fields.id = reservations.field_id JOIN users ON users.id = reservations.user_id WHERE reservations.user_id = ?';
+      'SELECT reservations.id, users.username, reservations.time_id, reservations.field_id, reservations.date AS reservation_date, times.slot AS reservation_time, fields.name AS field_name, fields.price AS field_price,reservations.status FROM reservations JOIN times ON times.id = reservations.time_id JOIN fields ON fields.id = reservations.field_id JOIN users ON users.id = reservations.user_id WHERE reservations.user_id = ?';
     db.query(q, [userInfo.id], (err, data) => {
       if (err) return res.status(500).json(err);
       return res.status(200).json(data);

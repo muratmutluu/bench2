@@ -2,7 +2,7 @@ import { db } from '../db/connect.js';
 
 export const getAllReservations = (req, res) => {
   const q =
-    'SELECT reservations.id, users.username, users.email, users.phone_number, reservations.time_id, reservations.field_id, reservations.date AS reservation_date, times.slot AS reservation_time, fields.name AS field_name, fields.price AS field_price FROM reservations JOIN times ON times.id = reservations.time_id JOIN fields ON fields.id = reservations.field_id JOIN users ON users.id = reservations.user_id';
+    'SELECT reservations.id, users.username, users.email, users.phone_number, reservations.time_id, reservations.field_id, reservations.date AS reservation_date, times.slot AS reservation_time, fields.name AS field_name, fields.price AS field_price,reservations.status FROM reservations JOIN times ON times.id = reservations.time_id JOIN fields ON fields.id = reservations.field_id JOIN users ON users.id = reservations.user_id';
 
   db.query(q, (err, data) => {
     if (err) return res.status(500).json(err);
@@ -45,6 +45,7 @@ export const getDashboardData = async (req, res) => {
   const q7 = 'SELECT COUNT(*) AS completed_reservations FROM reservations WHERE status = 1';
   const q8 = 'SELECT COUNT(*) AS pending_reservations FROM reservations WHERE status = 0';
   const q9 = 'CALL `gunlere_gore_rezervasyon_sayisi`()';
+  const q10 = "CALL `aylara_ve_sahalara_gore_rez_sayisi`()"
 
   const [total_reservations] = await db.promise().query(q1);
   const [total_users] = await db.promise().query(q2);
@@ -55,6 +56,7 @@ export const getDashboardData = async (req, res) => {
   const [completed_reservations] = await db.promise().query(q7);
   const [pending_reservations] = await db.promise().query(q8);
   const [reservations_by_days] = await db.promise().query(q9);
+  const [reservations_by_months_and_fields] = await db.promise().query(q10);
 
   const data = {
     total_reservations: total_reservations[0].total_reservations,
@@ -66,6 +68,7 @@ export const getDashboardData = async (req, res) => {
     completed_reservations: completed_reservations[0].completed_reservations,
     pending_reservations: pending_reservations[0].pending_reservations,
     reservations_by_days: reservations_by_days[0],
+    reservations_by_months_and_fields: reservations_by_months_and_fields[0]
   };
 
   return res.status(200).json(data);

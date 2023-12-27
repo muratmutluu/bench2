@@ -1,6 +1,7 @@
 import PieChartUser from '../components/PieChartUser';
 import ReservationAreaChart from '../components/ReservationAreaChart';
 import ReservationChart from '../components/ReservationChart';
+import ReservationLineChart from '../components/ReservationLineChart';
 import useFetch from '../hooks/useFetch';
 
 const Dashboard = () => {
@@ -71,6 +72,10 @@ const Dashboard = () => {
         <div className="rounded-md border bg-gray-100 p-3 shadow-md flex flex-col justify-center items-center col-span-2 gap-2">
           <h2 className="text-2xl">Günlere Göre Rezervasyon Sayısı</h2>
           <ReservationAreaChart data={data.reservations_by_days} loading={loading} />
+        </div>
+        <div className="rounded-md border bg-gray-100 p-3 shadow-md flex flex-col justify-center items-center col-span-2 gap-2">
+          <h2 className="text-2xl">Sahalara ve Aylara Göre Rezervasyon Sayısı</h2>
+          <ReservationLineChart data={data.reservations_by_months_and_fields} loading={loading} />
         </div>
       </section>
     </div>
