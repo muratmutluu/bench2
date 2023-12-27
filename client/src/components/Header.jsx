@@ -25,6 +25,11 @@ const Header = () => {
         <Link to="/" className="flex items-center gap-1 text-green-600 bg-gray-50 p-1.5 rounded-md">
           <GiSoccerBall size={32} />
           <span className="text-4xl font-extrabold">Bench Cafe</span>
+          {user && user.isAdmin === 1 && (
+            <span className="text-2xl ml-2 p-1 text-red-500  border-2 border-red-500 rounded-xl font-bold">
+              Admin
+            </span>
+          )}
         </Link>
 
         <div className="flex items-center gap-3">
@@ -32,9 +37,17 @@ const Header = () => {
           {user ? (
             <>
               {user.isAdmin ? (
-                <Link to="/dashboard" className="btn-primary">
-                  Dashboard
-                </Link>
+                <>
+                  <Link to="/dashboard" className="btn-primary">
+                    Dashboard
+                  </Link>
+                  <Link to="/all_reservations" className="btn-primary">
+                    Tüm Rezervasyonlar
+                  </Link>
+                  <Link to="/all_users" className="btn-primary">
+                    Tüm Kullanıcılar
+                  </Link>
+                </>
               ) : (
                 <Link to="/reservation_list" className="btn-primary">
                   Rezervasyonlarım

@@ -3,10 +3,9 @@ import useFetch from '../hooks/useFetch';
 import { format } from 'date-fns';
 import axios from 'axios';
 
-
 const handleDelete = async (id) => {
   try {
-    await axios.delete(`/api/reservations/delete/${id}`);
+    await axios.delete(`/api/admin/delete_reservation/${id}`);
     window.location.reload();
   } catch (error) {
     console.log(error);
@@ -15,13 +14,15 @@ const handleDelete = async (id) => {
 
 const columns = [
   { field: 'id', headerName: 'ID', width: 70 },
-  { field: 'username', headerName: 'Kullanıcı Adı', width: 150},
+  { field: 'username', headerName: 'Kullanıcı Adı', width: 150 },
+  { field: 'email', headerName: 'Kullanıcı Email', width: 150 },
+  { field: 'phone_number', headerName: 'Kullanıcı Telefon No', width: 150 },
   { field: 'field_name', headerName: 'Saha Adı', width: 150 },
   {
     field: 'reservation_date',
     headerName: 'Rezervasyon Tarihi',
     width: 150,
-    renderCell: (params) => format(new Date(params.value), 'dd.MM.yyyy')
+    renderCell: (params) => format(new Date(params.value), 'dd.MM.yyyy'),
   },
   { field: 'reservation_time', headerName: 'Rezervasyon Saati', width: 150 },
   { field: 'field_price', headerName: 'Saha Fiyatı', width: 150 },
@@ -37,16 +38,15 @@ const columns = [
     ),
   },
 ];
-
-const ReservationTable = () => {
-  const { data, loading } = useFetch('/api/reservations/list');
+const ReservationsTable = () => {
+  const { data, loading } = useFetch('/api/admin/all_reservations');
   return (
     <div className="h-[720px] w-full p-3 bg-green-100 rounded-lg">
       {loading ? (
         'Loading...'
       ) : (
         <DataGrid
-        className='bg-gray-100'
+          className="bg-gray-100"
           rows={data}
           disableColumnFilter
           disableColumnSelector
@@ -70,4 +70,4 @@ const ReservationTable = () => {
   );
 };
 
-export default ReservationTable;
+export default ReservationsTable;

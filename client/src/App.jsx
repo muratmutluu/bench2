@@ -6,6 +6,9 @@ import Register from './pages/Register';
 import ReservationList from './pages/ReservationList';
 import { useContext } from 'react';
 import { AuthContext } from './context/AuthContext';
+import Dashboard from './pages/Dashboard';
+import ReservationsList from './pages/ReservationsList';
+import UsersList from './pages/UsersList';
 
 const App = () => {
   const ProtectedRoute = ({ children }) => {
@@ -35,7 +38,30 @@ const App = () => {
         { path: '/login', element: <Login /> },
         { path: '/register', element: <Register /> },
         { path: '/reservation_list', element: <ReservationList /> },
-        { path: '/dashboard', element: <ProtectedRoute>Dashboard</ProtectedRoute> },
+        {
+          path: '/dashboard',
+          element: (
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          ),
+        },
+        {
+          path: '/all_reservations',
+          element: (
+            <ProtectedRoute>
+              <ReservationsList />
+            </ProtectedRoute>
+          ),
+        },
+        {
+          path: '/all_users',
+          element: (
+            <ProtectedRoute>
+              <UsersList />
+            </ProtectedRoute>
+          ),
+        },
       ],
     },
   ]);

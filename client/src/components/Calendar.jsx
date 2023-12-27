@@ -31,6 +31,9 @@ const Calendar = () => {
   const handlePreviousWeek = () => {
     setCurrentDate(getPreviousWeek(currentDate));
   };
+  const handleNextWeek = () => {
+    setCurrentDate(getNextWeek(currentDate));
+  };
 
   const startOfCurrentWeek = startOfWeek(currentDate, { weekStartsOn: 1 });
   const endOfCurrentWeek = endOfWeek(startOfCurrentWeek, { weekStartsOn: 1 });
@@ -44,9 +47,6 @@ const Calendar = () => {
     return differenceInWeeks(date, startOfFirstWeek) + 1;
   };
 
-  const handleNextWeek = () => {
-    setCurrentDate(getNextWeek(currentDate));
-  };
   // Tarih Methodları Bitiş
 
   const { data, reFetch } = useFetch('/api/reservations');
@@ -55,6 +55,7 @@ const Calendar = () => {
     return {
       date: format(reservation.reservation_date, 'yyyy-MM-dd'),
       time_id: reservation.time_id,
+      status: reservation.status,
     };
   });
 
@@ -129,17 +130,39 @@ const Calendar = () => {
                         reservedSlot.date === format(day, 'yyyy-MM-dd') &&
                         reservedSlot.time_id === item.id
                     );
+                    const isCompleted = reservedSlots.some(
+                      (reservedSlot) =>
+                        reservedSlot.date === format(day, 'yyyy-MM-dd') &&
+                        reservedSlot.time_id === item.id &&
+                        reservedSlot.status === 1
+                    );
+
+                    const isTimeExpired =
+                      new Date(new Date().setDate(new Date().getDate() - 1)) > new Date(day);
+
                     const cellStyle = isReserved
-                      ? 'bg-red-500 cursor-not-allowed'
-                      : 'cursor-pointer bg-green-400';
+                      ? isCompleted
+                        ? 'bg-yellow-400 cursor-not-allowed text-gray-700'
+                        : 'bg-red-500 cursor-not-allowed'
+                      : isTimeExpired
+                      ? 'bg-blue-400 cursor-not-allowed'
+                      : 'bg-green-400';
                     return (
-                      <td key={index} className="border-l border-gray-400 text-white">
+                      <td
+                        key={index}
+                        className="border-l border-gray-400 text-white font-bold text-md"
+                      >
                         <div className={cellStyle}>
                           {isReserved ? (
-                            <div className='flex justify-center items-center p-6'>DOLU</div>
+                            <div className="flex justify-center items-center p-6">
+                              {isCompleted ? 'BİTTİ' : 'DOLU'}
+                            </div>
                           ) : (
-                            <div onClick={() => handleCellClick(item.slot, item.id, day)} className='flex justify-center items-center p-6'>
-                              <FaPlus size={24}/>
+                            <div
+                              onClick={() => handleCellClick(item.slot, item.id, day)}
+                              className="flex justify-center items-center p-6"
+                            >
+                              {isTimeExpired ? 'GEÇMİŞ' : <FaPlus size={24} />}
                             </div>
                           )}
                         </div>

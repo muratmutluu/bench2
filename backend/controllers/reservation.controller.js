@@ -63,11 +63,39 @@ export const getReservationsUser = (req, res) => {
   });
 };
 
+export const deleteReservationUser = (req, res) => {
+  const token = req.cookies.access_token;
+  if (!token)
+    return res.status(401).json({
+      success: false,
+      message: 'Lütfen giriş yapın!',
+    });
+
+  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+    if (err) return res.status(403).json({ success: false, message: 'Invalid token!' });
+
+    const userInfo = decoded;
+
+    const q = 'DELETE FROM reservations WHERE id = ? AND user_id = ?';
+
+    db.query(q, [req.params.id, userInfo.id], (err, data) => {
+      if (err) return res.status(500).json(err);
+      return res.status(200).json(data);
+    });
+  });
+};
+
 export const getReservations = (req, res) => {
   const q =
-    'SELECT reservations.id, reservations.time_id,reservations.field_id,reservations.date AS reservation_date,times.slot AS reservation_time,fields.name AS field_name, fields.price AS field_price FROM reservations JOIN times ON times.id = reservations.time_id JOIN fields ON fields.id = reservations.field_id';
+    "UPDATE reservations SET reservations.status = '1' WHERE reservations.date < CURDATE() AND reservations.status = '0';";
+
   db.query(q, (err, data) => {
     if (err) return res.status(500).json(err);
-    return res.status(200).json(data);
+    const q =
+      'SELECT reservations.id, reservations.time_id,reservations.field_id,reservations.date AS reservation_date,times.slot AS reservation_time,fields.name AS field_name, fields.price AS field_price, reservations.status FROM reservations JOIN times ON times.id = reservations.time_id JOIN fields ON fields.id = reservations.field_id';
+    db.query(q, (err, data) => {
+      if (err) return res.status(500).json(err);
+      return res.status(200).json(data);
+    });
   });
 };
