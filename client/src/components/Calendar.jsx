@@ -146,7 +146,7 @@ const Calendar = () => {
                         : 'bg-red-500 cursor-not-allowed'
                       : isTimeExpired
                       ? 'bg-blue-400 cursor-not-allowed'
-                      : 'bg-green-400';
+                      : 'bg-green-400 cursor-pointer hover:bg-green-500';
                     return (
                       <td
                         key={index}
